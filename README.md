@@ -1,11 +1,11 @@
 # 🌊 Rota Seca — CitizenTech
 
 > **FIAP — Global Solution 2026/2**  
-> **Curso:** Engenharia de Software (2º Ano) — Turma 2ESOA  
+> **Curso:** Engenharia de Software — Turma 2ESOA  
 > **Tema:** CitizenTech: Tecnologia com o cidadão no centro da inovação  
-> **Categoria:** Clima e emergências / Cidades (Zona Sul de São Paulo)  
-> **Vídeo Pitch da Solução:** [https://youtu.be/SEU_LINK_DO_PITCH_AQUI](https://youtu.be/SEU_LINK_DO_PITCH_AQUI) *(Acesso público)*
-
+> **Categoria:** Clima e emergências / Cidades  
+> **Aplicação Web no Ar (GitHub Pages):** [https://luzyaga.github.io/rota-seca-citizentech/](https://luzyaga.github.io/rota-seca-citizentech/)  
+> **Vídeo Pitch da Solução:** [https://youtu.be/LINK](https://youtu.be/LINK) 
 ---
 
 ## 👥 Integrantes do Grupo
@@ -159,7 +159,6 @@ GlobalSolutions/
 
 ## 🤖 6. Declaração do Uso de IA Generativa
 
-*(Em cumprimento às diretrizes acadêmicas da FIAP para a Global Solution 2026/2)*
 
 - **Ferramenta Utilizada:** Google Gemini (Antigravity Assistant).
 - **Finalidade:**
