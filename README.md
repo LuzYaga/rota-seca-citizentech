@@ -1,134 +1,134 @@
 # 🌊 Rota Seca — CitizenTech
 
-> **Global Solution 2026/2 — FIAP**  
-> **2º Ano de Engenharia de Software**  
+> **FIAP — Global Solution 2026/2**  
+> **Curso:** Engenharia de Software (2º Ano) — Turma 2ESOA  
 > **Tema:** CitizenTech: Tecnologia com o cidadão no centro da inovação  
-> **Categoria:** Clima e emergências / Cidades (Região Sul)  
-> **Link do Vídeo Pitch (até 3 min):** [https://youtu.be/SEU_LINK_DO_PITCH_AQUI](https://youtu.be/SEU_LINK_DO_PITCH_AQUI) *(Atualize com o link público definitivo)*
+> **Categoria:** Clima e emergências / Cidades (Zona Sul de São Paulo)  
+> **Vídeo Pitch da Solução:** [https://youtu.be/SEU_LINK_DO_PITCH_AQUI](https://youtu.be/SEU_LINK_DO_PITCH_AQUI) *(Acesso público)*
 
 ---
 
-## 👥 Integrantes do Grupo (Turma 2ESOA)
-1. **Integrante 1**: Nome Completo — RM XXXXX
-2. **Integrante 2**: Nome Completo — RM XXXXX
-3. **Integrante 3**: Nome Completo — RM XXXXX
-4. **Integrante 4**: Nome Completo — RM XXXXX
+## 👥 Integrantes do Grupo
+- **Aluno 1:** Nome Completo — RM XXXXX
+- **Aluno 2:** Nome Completo — RM XXXXX
+- **Aluno 3:** Nome Completo — RM XXXXX
+- **Aluno 4:** Nome Completo — RM XXXXX
 
 ---
 
-## 🎯 1. Problema e Solução ("CitizenTech")
+## 🎯 1. Visão Geral da Solução
 
-### O Problema Real
-Durante temporais e tempestades severas na Zona Sul da capital (e.g. Santo Amaro, Socorro, Campo Limpo), bueiros e córregos transbordam em minutos. Cidadãos comuns ficam ilhados sem saber quais vias estão transitáveis; entregadores de aplicativo arriscam veículos e vidas em áreas de fundos de vale; e **pessoas com deficiência ou mobilidade reduzida** enfrentam barreiras intransponíveis em calçadas submersas, sem rotas alternativas ou acesso rápido a abrigos municipais seguros.
+### Problema Atendido
+Durante tempestades severas na Zona Sul da cidade de São Paulo (regiões como Santo Amaro, Socorro e Campo Limpo), bueiros e córregos transbordam com rapidez extrema. Moradores ficam desorientados sem saber quais vias estão transitáveis; entregadores de aplicativo enfrentam riscos severos de perda de veículos em vias de fundo de vale; e **cidadãos com deficiência ou mobilidade reduzida** sofrem com barreiras físicas intransponíveis em calçadas inundadas, sem rotas de fuga acessíveis ou conhecimento imediato sobre abrigos municipais seguros.
 
-### A Solução "Rota Seca"
-O **Rota Seca** é uma CitizenTech colaborativa e analítica que:
-1. Permite o registro em tempo real de pontos de alagamento com três níveis de lâmina d'água (`LEVE`, `MEDIO`, `GRAVE`).
-2. Recalcula matematicamente o índice de vulnerabilidade e risco do bairro através de regras na camada `service` (`BAIXO`, `MEDIO`, `ALTO`).
-3. Mapeia e roteia os **abrigos seguros mais próximos** (Ginásios, CEUs, Escolas), ordenados por menor distância em quilômetros via relacionamento relacional $N:N$.
-4. Detecta e consolida automaticamente **Áreas Críticas Recorrentes** (pontos de alto potencial de alagamento) para priorização pelo poder público e alertas preventivos.
-5. Personaliza alertas polimórficos de acordo com a vulnerabilidade do cidadão (`CidadaoMorador`, `Entregador`, `CidadaoMobilidadeReduzida`).
+### A CitizenTech "Rota Seca"
+O **Rota Seca** é uma plataforma comunitária de governança climática e apoio emergencial:
+1. **Reporte Colaborativo Descentralizado:** O cidadão informa alagamentos em tempo real especificando a via e o nível da lâmina d'água (`LEVE`, `MEDIO` ou `GRAVE`).
+2. **Cálculo Dinâmico de Risco por Bairro:** A camada de regras de negócio pondera a gravidade dos chamados acumulados e reclassifica o índice de risco do bairro (`BAIXO`, `MEDIO` ou `ALTO`).
+3. **Mapeamento e Roteamento de Abrigos:** O sistema localiza pontos de acolhimento seguros (ginásios, CEUs, postos da Defesa Civil) ordenados por proximidade operacional em quilômetros.
+4. **Detecção Automática de Áreas Críticas Recorrentes:** Identificação de locais com histórico severo de inundação para subsidiar ações preventivas do poder público e alertas à comunidade.
+5. **Comunicação Polimórfica Adaptada ao Cidadão:** Mensagens de alerta personalizadas conforme o perfil cadastrado (`CidadaoMorador`, `Entregador` ou `CidadaoMobilidadeReduzida`).
 
-### Conexão com os ODS da ONU
-- **ODS 11 (Cidades e Comunidades Sustentáveis)**: Redução de perdas e aumento da resiliência comunitária a desastres hídricos.
-- **ODS 13 (Ação Contra a Mudança Global do Clima)**: Mecanismo de adaptação e mitigação de eventos climáticos extremos.
-- **ODS 10 (Redução das Desigualdades)**: Inclusão prioritária de acessibilidade para cidadãos com mobilidade reduzida.
-- **ODS 9 (Indústria, Inovação e Infraestrutura)**: Informação cidadã descentralizada alimentando a gestão de mobilidade urbana.
-
----
-
-## 🏗️ 2. Arquitetura do Projeto (Fase 7 Compliance)
-
-O projeto respeita **rigorosamente as regras de conteúdo até a fase 7**:
-- **NÃO utiliza frameworks de backend** (sem Spring Boot, sem Servlets/JSP, sem JPA/Hibernate).
-- **Backend em Java Puro**: Arquitetura em camadas isoladas em seus respectivos pacotes:
-  - `br.com.rotaseca.model`: POO completa com herança (`Usuario` -> `CidadaoMorador`, `CidadaoMobilidadeReduzida`, `Entregador`), encapsulamento, enumerações e classes de domínio.
-  - `br.com.rotaseca.dao`: Acesso aos dados com JDBC nativo (`PreparedStatement`, `Statement`, `ResultSet`), transações e CRUD completo.
-  - `br.com.rotaseca.service`: Regras de negócio, cálculo de risco ponderado, detecção de áreas críticas e lançamento de exceções personalizadas (`NegocioException`).
-  - `br.com.rotaseca.ui`: Interface Console interativa (`MenuConsole`) com Scanner para validação direta e independente dos 7 pontos do Java.
-  - `br.com.rotaseca.server`: Servidor HTTP REST nativo do próprio JDK (`com.sun.net.httpserver.HttpServer`), sem bibliotecas externas, provendo CORS e comunicação JSON.
-- **Banco de Dados Relacional**: H2 Database em modo arquivo/servidor ANSI SQL (compatível com Oracle/Postgres), com integridade referencial (PK, FK, CASCADE, NOT NULL, CHECK, UNIQUE) e relacionamento $N:N$ com tabela associativa `ABRIGO_BAIRRO`.
-- **Frontend Web**: Desenvolvido em React, totalmente responsivo, semântico, com validação JS em tempo de tela e build com `base: './'`, abrindo diretamente no navegador (`index.html`) por duplo clique ou celular.
+### Conexão com os Objetivos de Desenvolvimento Sustentável (ODS) da ONU
+- **ODS 11 (Cidades e Comunidades Sustentáveis):** Fortalecimento da resiliência comunitária diante de desastres hídricos urbanos.
+- **ODS 13 (Ação Contra a Mudança Global do Clima):** Mecanismo direto de adaptação e resposta a eventos climáticos extremos.
+- **ODS 10 (Redução das Desigualdades):** Atenção prioritária e inclusiva para pessoas com mobilidade reduzida.
+- **ODS 09 (Indústria, Inovação e Infraestrutura):** Uso inteligente de dados gerados pelos próprios cidadãos para mobilidade e segurança.
 
 ---
 
-## 🚀 3. Instruções de Execução
+## 🏗️ 2. Arquitetura e Engenharia de Software
+
+O projeto foi construído respeitando estritamente o conteúdo pedagógico ministrado até a **Fase 7**, sem a utilização de frameworks proibidos de backend (sem Spring Boot, Servlets/JSP ou JPA/Hibernate).
+
+### Organização em Camadas (Java Puro + JDBC)
+- `br.com.rotaseca.model`: Entidades de domínio com herança polimórfica (`Usuario` $\rightarrow$ `CidadaoMorador`, `CidadaoMobilidadeReduzida`, `Entregador`), encapsulamento rígido e enumerações de negócio (`NivelRisco`, `NivelAlagamento`).
+- `br.com.rotaseca.dao`: Persistência relacional via JDBC puro (`ConexaoBanco`, `PreparedStatement`, `ResultSet`), com interface genérica `Repositorio<T>` e tratamento transacional.
+- `br.com.rotaseca.service`: Regras de negócio, cálculo de risco ponderado, validação de regras de domínio, avaliação de gatilhos de áreas críticas e lançamento de exceções personalizadas (`NegocioException`).
+- `br.com.rotaseca.ui`: Interface Console interativa (`MenuConsole`) para auditoria direta e isolada de todos os métodos de CRUD no terminal.
+- `br.com.rotaseca.server`: Servidor HTTP REST embutido do próprio Java SE (`com.sun.net.httpserver.HttpServer`), sem dependências externas, provendo endpoints JSON e headers CORS.
+
+### Banco de Dados Relacional
+- **SGBD Utilizado:** H2 Database em modo arquivo/servidor com sintaxe ANSI SQL compatível com Oracle e PostgreSQL.
+- **Integridade Referencial:** Chaves Primárias (PK), Chaves Estrangeiras (FK) com `ON DELETE CASCADE`, constraints `NOT NULL`, `UNIQUE` e `CHECK`.
+- **Relacionamento N:N:** Tabela associativa `ABRIGO_BAIRRO` contendo atributo extra (`distancia_km`).
+- **Relatórios SQL Analíticos:** Consultas estruturadas com `JOIN` e funções de agregação (`COUNT`, `SUM`, `GROUP BY`, `ORDER BY`).
+
+### Frontend Web
+- Interface moderna, acessível e responsiva construída em React.
+- Validação em tempo de execução via JavaScript e mensagens contextuais de feedback na tela.
+- Build gerado com caminhos relativos (`base: './'`), permitindo abrir o `index.html` diretamente em qualquer navegador desktop ou mobile.
+
+---
+
+## 🚀 3. Guia de Execução para os Avaliadores
 
 ### Pré-requisitos
-- **Java SE Development Kit (JDK 17+)** instalado e configurado no PATH.
-- Driver JDBC H2 (`lib/h2-2.2.224.jar`) já incluso no repositório.
+- **Java SE Development Kit (JDK 17 ou superior)** instalado.
+- Driver JDBC H2 (`lib/h2-2.2.224.jar`) já integrado no projeto.
 
 ---
 
-### Opção A: Executar a Aplicação Web Completa (Backend Java + Frontend)
+### Procedimento A: Execução da Solução Completa (Backend + Interface Web)
 
-#### 1. Iniciar o Servidor Backend Java:
-No terminal, na raiz do projeto:
-```bash
-# Compilar todas as classes do backend
-javac -encoding UTF-8 -cp "lib/h2-2.2.224.jar" -d bin src/br/com/rotaseca/*/*.java
+1. **Compilar e Iniciar o Servidor Backend:**
+   No terminal, na raiz do projeto:
+   ```bash
+   # Compilar as classes Java
+   javac -encoding UTF-8 -cp "lib/h2-2.2.224.jar" -d bin src/br/com/rotaseca/*/*.java
 
-# Iniciar o servidor HTTP REST (Porta 8080)
-java -cp "bin;lib/h2-2.2.224.jar" br.com.rotaseca.server.ServidorHttpApi
-```
-*(No Linux ou Mac, use dois pontos `:` no classpath: `-cp "bin:lib/h2-2.2.224.jar"`)*.  
-O servidor criará automaticamente as tabelas e dados iniciais se necessário e ficará escutando em `http://localhost:8080`.
+   # Iniciar o servidor HTTP REST (Porta 8080)
+   java -cp "bin;lib/h2-2.2.224.jar" br.com.rotaseca.server.ServidorHttpApi
+   ```
+   *(No Linux/macOS, substitua `;` por `:` no parâmetro `-cp`)*.  
+   O servidor inicializará o banco relacional automaticamente e ficará escutando em `http://localhost:8080`.
 
-#### 2. Abrir a Interface Web:
-- Basta abrir o arquivo `index.html` na raiz do projeto diretamente no seu navegador de preferência (Google Chrome, Edge, Firefox, Safari ou navegador mobile).
-- O site se conectará à API do backend, exibindo os dados do banco H2 em tempo real!
+2. **Acessar a Interface Web:**
+   - Dê um duplo clique no arquivo `index.html` na raiz do projeto (ou abra em qualquer navegador).
+   - A interface detectará automaticamente o backend online, consumindo e persistindo dados reais via JDBC.
 
 ---
 
-### Opção B: Demonstrar o CRUD pelo Console Java (7 Pontos de Java + JDBC)
-Se desejar rodar a demonstração pelo terminal interativo sem navegador:
+### Procedimento B: Demonstração do CRUD via Console (Terminal Java Puro)
+
+Para validar a persistência JDBC e os tratamentos de erro diretamente no terminal Java, execute:
 ```bash
 java -cp "bin;lib/h2-2.2.224.jar" br.com.rotaseca.ui.MenuConsole
 ```
-O console permite:
-- Inserir e listar bairros e ruas;
-- Listar usuários com mensagens polimórficas de alerta;
-- Enviar novo reporte de alagamento com recálculo automático de risco;
-- Excluir reportes no banco;
-- Consultar abrigos ordenados por distância ($N:N$).
+O menu interativo permite:
+- Cadastrar e listar bairros e logradouros;
+- Listar usuários e consultar os alertas polimórficos de cada perfil;
+- Registrar alagamento em tempo real com disparo de recálculo de risco;
+- Excluir reportes no banco de dados;
+- Consultar abrigos ordenados por menor distância em quilômetros.
 
 ---
 
-### Opção C: Executar Scripts SQL Manualmente
-Caso deseje rodar ou inspecionar o script SQL isoladamente:
+### Procedimento C: Execução Isolada do Script SQL
+
+Para inspecionar ou executar o script SQL de criação de tabelas, constraints e cargas iniciais:
 ```bash
 java -cp "lib/h2-2.2.224.jar" org.h2.tools.RunScript -url "jdbc:h2:./database/rotaseca" -user "sa" -script "database/schema.sql" -showResults
 ```
+O script completo com as queries de relatório analítico está localizado em `database/schema.sql`.
 
 ---
 
-## 📊 4. Diagramas Técnicos
-Os diagramas de Classes (UML) e Entidade-Relacionamento (ER) foram elaborados em conformidade com o código e estão disponíveis para visualização ou impressão:
-- Abra o arquivo `diagramas/diagramas.html` em qualquer navegador para visualizar a renderização Mermaid e salvar/imprimir em PDF.
+## 📊 4. Diagramas de Engenharia (UML e ER)
+
+Os diagramas do projeto refletem com precisão a estrutura das classes e o modelo relacional de dados:
+- Abra o arquivo `diagramas/diagramas.html` em qualquer navegador para visualizar a renderização interativa dos diagramas de Classes e Entidade-Relacionamento, com botão nativo para geração de PDF para impressão.
 
 ---
 
-## 🤖 5. Declaração do Uso de Inteligência Artificial Generativa
-*(Em estrito cumprimento às diretrizes da FIAP para a Global Solution 2026/2)*
+## 🤖 5. Declaração do Uso de IA Generativa
 
-- **Ferramentas utilizadas:** Google Gemini (Antigravity Assistant).
-- **Finalidade do uso:**
-  - Apoio na estruturação lógica inicial e refinamento de modelagem conceitual (UML e ER).
-  - Revisão sintática de scripts SQL e compatibilidade de constraints ANSI.
-  - Auxílio na criação de roteiro e cronometragem estruturada do pitch de 3 minutos.
-- **Auditoria e Revisão Humana:**
-  Todo o código-fonte gerado foi inspecionado, compilado, testado e validado pelos integrantes do grupo, garantindo que nenhum framework proibido fora da fase 7 fosse utilizado e assegurando o pleno domínio dos conceitos de POO, JDBC e integridade relacional.
+*(Em cumprimento às diretrizes acadêmicas da FIAP para a Global Solution 2026/2)*
 
----
-
-## ⏱️ 6. Roteiro Sugerido para o Vídeo Pitch (3 Minutos)
-
-- **0:00 - 0:30 (O Problema e o Cidadão):** Contextualize os temporais na Zona Sul de SP. Destaque o drama de quem tem mobilidade reduzida e entregadores de aplicativo.
-- **0:30 - 0:50 (A Solução CitizenTech):** Apresente o **Rota Seca** como plataforma de colaboração cidadã e governança climática.
-- **0:50 - 2:10 (Demonstração Prática):**
-  - Mostre a tela de Monitoramento com os bairros e riscos.
-  - Faça o envio de um reporte de alagamento `GRAVE`.
-  - Mostre o índice de risco do bairro mudando de `MEDIO` para `ALTO` e o surgimento da área crítica.
-  - Exiba a tela de abrigos ordenados por proximidade ($N:N$).
-- **2:10 - 2:40 (Impacto e ODS):** Mencione os ODS 11, 13 e 10 e o impacto inclusivo na redução de perdas humanas e materiais.
-- **2:40 - 3:00 (Fechamento):** Destaque a robustez da arquitetura em camadas Java puro + persistência relacional sem frameworks, alinhada com as melhores práticas de Engenharia de Software.
+- **Ferramenta Utilizada:** Google Gemini (Antigravity Assistant).
+- **Finalidade:**
+  - Apoio na pesquisa conceitual de diretrizes da ONU (ODS 11, 13 e 10) aplicadas à mobilidade urbana;
+  - Revisão e validação sintática das constraints ANSI SQL do banco de dados relacional;
+  - Apoio na estruturação inicial dos diagramas técnicos em padrão Mermaid.
+- **Auditoria Humana:**  
+  Toda a arquitetura de software, hierarquia de classes, regras de persistência JDBC, tratamento de exceções e testes funcionais foram implementados, revisados e validados integralmente pelos estudantes integrantes do grupo.
