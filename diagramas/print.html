@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramas Técnicos - Rota Seca</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm 12mm 15mm 12mm;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .header {
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      color: #0f172a;
+      font-size: 20pt;
+      margin: 0 0 4px 0;
+    }
+    .subtitle {
+      color: #64748b;
+      font-size: 11pt;
+      margin: 0;
+    }
+    .section-title {
+      color: #0369a1;
+      font-size: 13pt;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 4px;
+      margin-top: 14px;
+      margin-bottom: 10px;
+    }
+    .diagram-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px;
+      background: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+    .legend {
+      font-size: 9pt;
+      color: #475569;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+  </style>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Segoe UI, Arial, sans-serif'
+    });
+  </script>
+</head>
+<body>
+
+  <!-- PÁGINA 1: DIAGRAMA ENTIDADE-RELACIONAMENTO -->
+  <div class="header">
+    <h1>Rota Seca — CitizenTech</h1>
+    <p class="subtitle">Global Solution 2026/2 · FIAP — Engenharia de Software · Turma 2ESOA</p>
+  </div>
+
+  <h2 class="section-title">1. Diagrama Entidade-Relacionamento (Modelo Relacional de Dados)</h2>
+  <div class="diagram-box">
+    <div class="mermaid">
+erDiagram
+    BAIRRO ||--o{ RUA : "possui"
+    BAIRRO ||--o{ ABRIGO_BAIRRO : "atendido por"
+    ABRIGO ||--o{ ABRIGO_BAIRRO : "atende"
+    RUA ||--o{ REPORTE_ALAGAMENTO : "localiza"
+    USUARIO ||--o{ REPORTE_ALAGAMENTO : "registra"
+    RUA ||--o{ AREA_CRITICA : "identificada como"
+    BAIRRO ||--o{ AREA_CRITICA : "registrada em"
+
+    BAIRRO {
+        BIGINT id PK
+        VARCHAR_100 nome "NOT NULL, UNIQUE"
+        VARCHAR_50 zona "NOT NULL"
+        VARCHAR_20 nivel_risco "CHECK (BAIXO, MEDIO, ALTO)"
+    }
+
+    RUA {
+        BIGINT id PK
+        VARCHAR_150 nome "NOT NULL"
+        VARCHAR_20 cep "NOT NULL"
+        BIGINT id_bairro FK "NOT NULL"
+    }
+
+    USUARIO {
+        BIGINT id PK
+        VARCHAR_120 nome "NOT NULL"
+        VARCHAR_100 contato "NOT NULL"
+        VARCHAR_30 tipo "CHECK (MORADOR, ENTREGADOR, MOBILIDADE_REDUZIDA)"
+    }
+
+    REPORTE_ALAGAMENTO {
+        BIGINT id PK
+        BIGINT id_rua FK "NOT NULL"
+        BIGINT id_usuario FK "NOT NULL"
+        VARCHAR_10 nivel "CHECK (LEVE, MEDIO, GRAVE)"
+        TIMESTAMP data_hora "NOT NULL"
+        VARCHAR_255 descricao
+    }
+
+    ABRIGO {
+        BIGINT id PK
+        VARCHAR_120 nome "NOT NULL"
+        VARCHAR_200 endereco "NOT NULL"
+        INT capacidade "CHECK (capacidade > 0)"
+    }
+
+    ABRIGO_BAIRRO {
+        BIGINT id_abrigo PK, FK
+        BIGINT id_bairro PK, FK
+        DECIMAL_5_2 distancia_km "NOT NULL, CHECK (distancia_km >= 0)"
+    }
+
+    AREA_CRITICA {
+        BIGINT id PK
+        BIGINT id_bairro FK "NOT NULL"
+        BIGINT id_rua FK "NOT NULL"
+        INT total_reportes "NOT NULL"
+        TIMESTAMP data_marcacao "NOT NULL"
+        VARCHAR_20 nivel_alerta "NOT NULL"
+    }
+    </div>
+  </div>
+  <p class="legend">
+    <strong>Destaques do Banco:</strong> Relacionamento N:N com tabela associativa <code>ABRIGO_BAIRRO</code> contendo atributo extra de <code>distancia_km</code>; integridade referencial com PKs, FKs (CASCADE), constraints <code>CHECK</code> e <code>UNIQUE</code>.
+  </p>
+
+  <!-- PÁGINA 2: DIAGRAMA DE CLASSES UML -->
+  <div class="page-break"></div>
+
+  <div class="header">
+    <h1>Rota Seca — CitizenTech</h1>
+    <p class="subtitle">Global Solution 2026/2 · FIAP — Engenharia de Software · Turma 2ESOA</p>
+  </div>
+
+  <h2 class="section-title">2. Diagrama de Classes UML (Camadas Model, DAO, Service e Server)</h2>
+  <div class="diagram-box">
+    <div class="mermaid">
+classDiagram
+    class EntidadeBase {
+        <<abstract>>
+        #Long id
+        +getId() Long
+        +setId(Long id) void
+    }
+
+    class Repositorio~T~ {
+        <<interface>>
+        +inserir(T obj) T
+        +atualizar(T obj) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) T
+        +listarTodos() List~T~
+    }
+
+    class Bairro {
+        -String nome
+        -String zona
+        -NivelRisco nivelRisco
+        +getNome() String
+        +setNome(String nome) void
+        +getZona() String
+        +setZona(String zona) void
+        +getNivelRisco() NivelRisco
+        +setNivelRisco(NivelRisco nivelRisco) void
+    }
+
+    class Rua {
+        -String nome
+        -String cep
+        -Bairro bairro
+        +getNome() String
+        +setNome(String nome) void
+        +getCep() String
+        +setCep(String cep) void
+        +getBairro() Bairro
+        +setBairro(Bairro bairro) void
+    }
+
+    class Usuario {
+        <<abstract>>
+        #String nome
+        #String contato
+        #String tipo
+        +getDescricaoAlerta()* String
+        +getInfoAdicional()* String
+    }
+
+    class CidadaoMorador {
+        -String observacaoResidencia
+        +getDescricaoAlerta() String
+    }
+
+    class CidadaoMobilidadeReduzida {
+        -String necessidadeAcessibilidade
+        +getDescricaoAlerta() String
+    }
+
+    class Entregador {
+        -String tipoVeiculo
+        +getDescricaoAlerta() String
+    }
+
+    class ReporteAlagamento {
+        -Rua rua
+        -Usuario usuario
+        -NivelAlagamento nivel
+        -LocalDateTime dataHora
+        -String descricao
+        +getPesoGravidade() int
+    }
+
+    class Abrigo {
+        -String nome
+        -String endereco
+        -int capacidade
+    }
+
+    class AbrigoBairro {
+        -Abrigo abrigo
+        -Bairro bairro
+        -double distanciaKm
+    }
+
+    class AreaCritica {
+        -Bairro bairro
+        -Rua rua
+        -int totalReportes
+        -LocalDateTime dataMarcacao
+        -String nivelAlerta
+    }
+
+    class BairroDAO {
+        +inserir(Bairro b) Bairro
+        +atualizar(Bairro b) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) Bairro
+        +listarTodos() List~Bairro~
+    }
+
+    class ReporteDAO {
+        +inserir(ReporteAlagamento r) ReporteAlagamento
+        +atualizar(ReporteAlagamento r) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) ReporteAlagamento
+        +listarTodos() List~ReporteAlagamento~
+    }
+
+    class MonitoramentoService {
+        -BairroDAO bairroDAO
+        -ReporteDAO reporteDAO
+        -AreaCriticaDAO areaCriticaDAO
+        +registrarReporte(Long idRua, Long idUser, String nivel, String desc) ReporteAlagamento
+        +recalcularEAtualizarRiscoBairro(Long idBairro) NivelRisco
+        +avaliarGatilhoAreaCritica(Rua rua) void
+        +listarAbrigosPorBairro(Long idBairro) List~AbrigoBairro~
+    }
+
+    EntidadeBase <|-- Bairro
+    EntidadeBase <|-- Rua
+    EntidadeBase <|-- Usuario
+    EntidadeBase <|-- ReporteAlagamento
+    EntidadeBase <|-- Abrigo
+    EntidadeBase <|-- AreaCritica
+
+    Usuario <|-- CidadaoMorador
+    Usuario <|-- CidadaoMobilidadeReduzida
+    Usuario <|-- Entregador
+
+    Repositorio <|.. BairroDAO
+    Repositorio <|.. ReporteDAO
+
+    MonitoramentoService --> BairroDAO
+    MonitoramentoService --> ReporteDAO
+    </div>
+  </div>
+  <p class="legend">
+    <strong>Destaques de POO:</strong> Herança e polimorfismo a partir de <code>Usuario</code>; interface genérica <code>Repositorio&lt;T&gt;</code> implementada pelos DAOs; separação estrita em camadas (<code>model</code>, <code>dao</code>, <code>service</code>, <code>ui</code>).
+  </p>
+
+</body>
+</html>

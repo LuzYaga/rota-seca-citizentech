@@ -1,0 +1,136 @@
+classDiagram
+    class EntidadeBase {
+        <<abstract>>
+        #Long id
+        +getId() Long
+        +setId(Long id) void
+    }
+
+    class Repositorio {
+        <<interface>>
+        +inserir(obj) Object
+        +atualizar(obj) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) Object
+        +listarTodos() List
+    }
+
+    class Bairro {
+        -String nome
+        -String zona
+        -NivelRisco nivelRisco
+        +getNome() String
+        +setNome(String nome) void
+        +getZona() String
+        +setZona(String zona) void
+        +getNivelRisco() NivelRisco
+        +setNivelRisco(NivelRisco nivelRisco) void
+    }
+
+    class Rua {
+        -String nome
+        -String cep
+        -Bairro bairro
+        +getNome() String
+        +setNome(String nome) void
+        +getCep() String
+        +setCep(String cep) void
+        +getBairro() Bairro
+        +setBairro(Bairro bairro) void
+    }
+
+    class Usuario {
+        <<abstract>>
+        #String nome
+        #String contato
+        #String tipo
+        +getDescricaoAlerta() String
+        +getInfoAdicional() String
+    }
+
+    class CidadaoMorador {
+        -String observacaoResidencia
+        +getDescricaoAlerta() String
+    }
+
+    class CidadaoMobilidadeReduzida {
+        -String necessidadeAcessibilidade
+        +getDescricaoAlerta() String
+    }
+
+    class Entregador {
+        -String tipoVeiculo
+        +getDescricaoAlerta() String
+    }
+
+    class ReporteAlagamento {
+        -Rua rua
+        -Usuario usuario
+        -NivelAlagamento nivel
+        -LocalDateTime dataHora
+        -String descricao
+        +getPesoGravidade() int
+    }
+
+    class Abrigo {
+        -String nome
+        -String endereco
+        -int capacidade
+    }
+
+    class AbrigoBairro {
+        -Abrigo abrigo
+        -Bairro bairro
+        -double distanciaKm
+    }
+
+    class AreaCritica {
+        -Bairro bairro
+        -Rua rua
+        -int totalReportes
+        -LocalDateTime dataMarcacao
+        -String nivelAlerta
+    }
+
+    class BairroDAO {
+        +inserir(Bairro b) Bairro
+        +atualizar(Bairro b) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) Bairro
+        +listarTodos() List
+    }
+
+    class ReporteDAO {
+        +inserir(ReporteAlagamento r) ReporteAlagamento
+        +atualizar(ReporteAlagamento r) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) ReporteAlagamento
+        +listarTodos() List
+    }
+
+    class MonitoramentoService {
+        -BairroDAO bairroDAO
+        -ReporteDAO reporteDAO
+        -AreaCriticaDAO areaCriticaDAO
+        +registrarReporte(Long idRua, Long idUser, String nivel, String desc) ReporteAlagamento
+        +recalcularEAtualizarRiscoBairro(Long idBairro) NivelRisco
+        +avaliarGatilhoAreaCritica(Rua rua) void
+        +listarAbrigosPorBairro(Long idBairro) List
+    }
+
+    EntidadeBase <|-- Bairro
+    EntidadeBase <|-- Rua
+    EntidadeBase <|-- Usuario
+    EntidadeBase <|-- ReporteAlagamento
+    EntidadeBase <|-- Abrigo
+    EntidadeBase <|-- AreaCritica
+
+    Usuario <|-- CidadaoMorador
+    Usuario <|-- CidadaoMobilidadeReduzida
+    Usuario <|-- Entregador
+
+    Repositorio <|.. BairroDAO
+    Repositorio <|.. ReporteDAO
+
+    MonitoramentoService --> BairroDAO
+    MonitoramentoService --> ReporteDAO
