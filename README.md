@@ -52,7 +52,7 @@ O projeto foi construído respeitando estritamente o conteúdo pedagógico minis
 - **SGBD Utilizado:** H2 Database em modo arquivo/servidor com sintaxe ANSI SQL compatível com Oracle e PostgreSQL.
 - **Integridade Referencial:** Chaves Primárias (PK), Chaves Estrangeiras (FK) com `ON DELETE CASCADE`, constraints `NOT NULL`, `UNIQUE` e `CHECK`.
 - **Relacionamento N:N:** Tabela associativa `ABRIGO_BAIRRO` contendo atributo extra (`distancia_km`).
-- **Relatórios SQL Analíticos:** Consultas estruturadas com `JOIN` e funções de agregação (`COUNT`, `SUM`, `GROUP BY`, `ORDER BY`).
+- **Relatórios SQL Analíticos:** Consultas estruturadas com `JOIN` e funções de agregação (`COUNT`, `SUM`, `GROUP BY`, `ORDER BY`) em `database/schema.sql`.
 
 ### Frontend Web
 - Interface moderna, acessível e responsiva construída em React.
@@ -114,14 +114,50 @@ O script completo com as queries de relatório analítico está localizado em `d
 
 ---
 
-## 📊 4. Diagramas de Engenharia (UML e ER)
+## 📊 4. Diagramas Técnicos (Entregues em PDF Separados)
 
-Os diagramas do projeto refletem com precisão a estrutura das classes e o modelo relacional de dados:
-- Abra o arquivo `diagramas/diagramas.html` em qualquer navegador para visualizar a renderização interativa dos diagramas de Classes e Entidade-Relacionamento, com botão nativo para geração de PDF para impressão.
+Os diagramas do projeto refletem com precisão a estrutura das classes e o modelo relacional de dados, organizados em dois arquivos PDF independentes na pasta `diagramas/`:
+- **`diagramas/diagrama_classes.pdf`**: Diagrama de Classes UML com pacotes `model`, `dao`, `service`, atributos, métodos, herança e interfaces.
+- **`diagramas/diagrama_er.pdf`**: Diagrama Entidade-Relacionamento (ER) com as 6 tabelas, PKs, FKs, cardinalidades e tabela associativa N:N.
+
+*(Arquivos auxiliares vetoriais `.svg` e imagem `.png` de alta resolução também estão disponíveis na mesma pasta).*
 
 ---
 
-## 🤖 5. Declaração do Uso de IA Generativa
+## 📁 5. Estrutura de Arquivos da Entrega
+
+```text
+GlobalSolutions/
+├── assets/                     # Assets estáticos empacotados para a web
+├── bin/                        # Binários compilados do backend Java
+├── database/
+│   ├── rotaseca.mv.db          # Arquivo do banco de dados relacional H2
+│   └── schema.sql              # Script SQL com DDL, DML e relatórios
+├── diagramas/
+│   ├── diagrama_classes.pdf    # Diagrama de Classes UML em PDF
+│   ├── diagrama_er.pdf         # Diagrama Entidade-Relacionamento em PDF
+│   ├── diagrama_classes.svg    # Vetorial de Classes
+│   ├── diagrama_er.svg         # Vetorial de Dados
+│   └── diagrama_classes.png    # Imagem de alta resolução
+├── frontend/                   # Código-fonte React (Vite)
+├── lib/
+│   └── h2-2.2.224.jar          # Driver JDBC do banco de dados
+├── src/                        # Código-fonte Java SE puro em camadas
+│   └── br/com/rotaseca/
+│       ├── dao/                # Camada de acesso a dados (JDBC puro)
+│       ├── model/              # Classes de domínio com POO e herança
+│       ├── server/             # Servidor HTTP REST (com.sun.net.httpserver)
+│       ├── service/            # Regras de negócio e cálculo de riscos
+│       └── ui/                 # Interface Console CLI (Scanner)
+├── .gitignore                  # Regras de exclusão de arquivos transitórios
+├── entrega.txt                 # Metadados do grupo e link do vídeo pitch
+├── index.html                  # Interface web executável com duplo clique
+└── README.md                   # Documentação completa para a banca
+```
+
+---
+
+## 🤖 6. Declaração do Uso de IA Generativa
 
 *(Em cumprimento às diretrizes acadêmicas da FIAP para a Global Solution 2026/2)*
 
@@ -129,6 +165,6 @@ Os diagramas do projeto refletem com precisão a estrutura das classes e o model
 - **Finalidade:**
   - Apoio na pesquisa conceitual de diretrizes da ONU (ODS 11, 13 e 10) aplicadas à mobilidade urbana;
   - Revisão e validação sintática das constraints ANSI SQL do banco de dados relacional;
-  - Apoio na estruturação inicial dos diagramas técnicos em padrão Mermaid.
+  - Apoio na estruturação inicial dos diagramas técnicos e conversão vetorial.
 - **Auditoria Humana:**  
   Toda a arquitetura de software, hierarquia de classes, regras de persistência JDBC, tratamento de exceções e testes funcionais foram implementados, revisados e validados integralmente pelos estudantes integrantes do grupo.
