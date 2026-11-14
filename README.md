@@ -9,10 +9,14 @@
 ---
 
 ## 👥 Integrantes do Grupo
-- **Aluno 1:** Nome Completo — RM XXXXX
-- **Aluno 2:** Nome Completo — RM XXXXX
-- **Aluno 3:** Nome Completo — RM XXXXX
-- **Aluno 4:** Nome Completo — RM XXXXX
+
+Felipe Sabará Cavalcante - RM566203
+
+João Batista Lima Neto - RM563426
+
+Calebe Pinto Figueira - RM565226
+
+Mariana Grunvald Cavilha - RM573794
 
 ---
 
