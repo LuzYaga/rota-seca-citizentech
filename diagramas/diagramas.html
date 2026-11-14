@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramas de Arquitetura e Engenharia de Dados - Rota Seca</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    h1, h2 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-top: 2rem; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto; }
+    p { color: #94a3b8; line-height: 1.6; }
+    .print-btn { background: #0284c7; color: white; border: none; padding: 0.75rem 1.5rem; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 1.5rem; }
+    @media print {
+      body { background: white; color: black; }
+      .card { border: 1px solid #ccc; background: white; }
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Salvar como PDF</button>
+
+  <h1>Projeto CitizenTech: Rota Seca - FIAP Global Solution 2026/2</h1>
+  <p>Diagramas técnicos para avaliação de Engenharia de Software (Java + JDBC + Banco de Dados Relacional).</p>
+
+  <h2>1. Diagrama Entidade-Relacionamento (ER) - Banco de Dados Relacional</h2>
+  <div class="card">
+    <div class="mermaid">
+erDiagram
+    BAIRRO ||--o{ RUA : "possui"
+    BAIRRO ||--o{ ABRIGO_BAIRRO : "atendido por"
+    ABRIGO ||--o{ ABRIGO_BAIRRO : "atende"
+    RUA ||--o{ REPORTE_ALAGAMENTO : "localiza"
+    USUARIO ||--o{ REPORTE_ALAGAMENTO : "registra"
+    RUA ||--o{ AREA_CRITICA : "identificada como"
+    BAIRRO ||--o{ AREA_CRITICA : "registrada em"
+
+    BAIRRO {
+        BIGINT id PK
+        VARCHAR_100 nome "NOT NULL, UNIQUE"
+        VARCHAR_50 zona "NOT NULL"
+        VARCHAR_20 nivel_risco "CHECK (BAIXO, MEDIO, ALTO)"
+    }
+
+    RUA {
+        BIGINT id PK
+        VARCHAR_150 nome "NOT NULL"
+        VARCHAR_20 cep "NOT NULL"
+        BIGINT id_bairro FK "NOT NULL"
+    }
+
+    USUARIO {
+        BIGINT id PK
+        VARCHAR_120 nome "NOT NULL"
+        VARCHAR_100 contato "NOT NULL"
+        VARCHAR_30 tipo "CHECK (MORADOR, ENTREGADOR, MOBILIDADE_REDUZIDA)"
+    }
+
+    REPORTE_ALAGAMENTO {
+        BIGINT id PK
+        BIGINT id_rua FK "NOT NULL"
+        BIGINT id_usuario FK "NOT NULL"
+        VARCHAR_10 nivel "CHECK (LEVE, MEDIO, GRAVE)"
+        TIMESTAMP data_hora "NOT NULL"
+        VARCHAR_255 descricao
+    }
+
+    ABRIGO {
+        BIGINT id PK
+        VARCHAR_120 nome "NOT NULL"
+        VARCHAR_200 endereco "NOT NULL"
+        INT capacidade "CHECK (capacidade > 0)"
+    }
+
+    ABRIGO_BAIRRO {
+        BIGINT id_abrigo PK, FK
+        BIGINT id_bairro PK, FK
+        DECIMAL_5_2 distancia_km "NOT NULL, CHECK (distancia_km >= 0)"
+    }
+
+    AREA_CRITICA {
+        BIGINT id PK
+        BIGINT id_bairro FK "NOT NULL"
+        BIGINT id_rua FK "NOT NULL"
+        INT total_reportes "NOT NULL"
+        TIMESTAMP data_marcacao "NOT NULL"
+        VARCHAR_20 nivel_alerta "NOT NULL"
+    }
+    </div>
+  </div>
+
+  <h2>2. Diagrama de Classes UML (Camadas Model, DAO, Service e Server)</h2>
+  <div class="card">
+    <div class="mermaid">
+classDiagram
+    class EntidadeBase {
+        <<abstract>>
+        #Long id
+        +getId() Long
+        +setId(Long id) void
+    }
+
+    class Repositorio~T~ {
+        <<interface>>
+        +inserir(T obj) T
+        +atualizar(T obj) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) T
+        +listarTodos() List~T~
+    }
+
+    class Bairro {
+        -String nome
+        -String zona
+        -NivelRisco nivelRisco
+    }
+
+    class Rua {
+        -String nome
+        -String cep
+        -Bairro bairro
+    }
+
+    class Usuario {
+        <<abstract>>
+        #String nome
+        #String contato
+        #String tipo
+        +getDescricaoAlerta()* String
+        +getInfoAdicional()* String
+    }
+
+    class CidadaoMorador {
+        -String observacaoResidencia
+        +getDescricaoAlerta() String
+    }
+
+    class CidadaoMobilidadeReduzida {
+        -String necessidadeAcessibilidade
+        +getDescricaoAlerta() String
+    }
+
+    class Entregador {
+        -String tipoVeiculo
+        +getDescricaoAlerta() String
+    }
+
+    class ReporteAlagamento {
+        -Rua rua
+        -Usuario usuario
+        -NivelAlagamento nivel
+        -LocalDateTime dataHora
+        -String descricao
+        +getPesoGravidade() int
+    }
+
+    class Abrigo {
+        -String nome
+        -String endereco
+        -int capacidade
+    }
+
+    class AbrigoBairro {
+        -Abrigo abrigo
+        -Bairro bairro
+        -double distanciaKm
+    }
+
+    class AreaCritica {
+        -Bairro bairro
+        -Rua rua
+        -int totalReportes
+        -LocalDateTime dataMarcacao
+        -String nivelAlerta
+    }
+
+    class BairroDAO {
+        +inserir(Bairro b) Bairro
+        +atualizar(Bairro b) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) Bairro
+        +listarTodos() List~Bairro~
+    }
+
+    class ReporteDAO {
+        +inserir(ReporteAlagamento r) ReporteAlagamento
+        +atualizar(ReporteAlagamento r) boolean
+        +excluir(Long id) boolean
+        +buscarPorId(Long id) ReporteAlagamento
+        +listarTodos() List~ReporteAlagamento~
+    }
+
+    class MonitoramentoService {
+        -BairroDAO bairroDAO
+        -ReporteDAO reporteDAO
+        -AreaCriticaDAO areaCriticaDAO
+        +registrarReporte(Long idRua, Long idUser, String nivel, String desc) ReporteAlagamento
+        +recalcularEAtualizarRiscoBairro(Long idBairro) NivelRisco
+        +avaliarGatilhoAreaCritica(Rua rua) void
+        +listarAbrigosPorBairro(Long idBairro) List~AbrigoBairro~
+    }
+
+    class ServidorHttpApi {
+        +main(String[] args) void
+        +iniciar() void
+    }
+
+    class MenuConsole {
+        +main(String[] args) void
+        +executar() void
+    }
+
+    EntidadeBase <|-- Bairro
+    EntidadeBase <|-- Rua
+    EntidadeBase <|-- Usuario
+    EntidadeBase <|-- ReporteAlagamento
+    EntidadeBase <|-- Abrigo
+    EntidadeBase <|-- AreaCritica
+
+    Usuario <|-- CidadaoMorador
+    Usuario <|-- CidadaoMobilidadeReduzida
+    Usuario <|-- Entregador
+
+    Repositorio <|.. BairroDAO
+    Repositorio <|.. ReporteDAO
+
+    MonitoramentoService --> BairroDAO
+    MonitoramentoService --> ReporteDAO
+    ServidorHttpApi --> MonitoramentoService
+    MenuConsole --> MonitoramentoService
+    </div>
+  </div>
+</body>
+</html>

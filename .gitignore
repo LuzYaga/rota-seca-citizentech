@@ -1,0 +1,20 @@
+# Byte-compiled / classes
+bin/
+*.class
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+.vite/
+
+# Arquivos temporários do banco gerados em runtime local
+database/*.mv.db
+database/*.trace.db
+
+# Sistema Operacional e IDEs
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+.history/
