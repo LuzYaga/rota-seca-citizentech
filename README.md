@@ -5,7 +5,7 @@
 > **Tema:** CitizenTech: Tecnologia com o cidadão no centro da inovação  
 > **Categoria:** Clima e emergências / Cidades  
 > **Aplicação Web no Ar (GitHub Pages):** [https://luzyaga.github.io/rota-seca-citizentech/](https://luzyaga.github.io/rota-seca-citizentech/)  
-> **Vídeo Pitch da Solução:** [https://youtu.be/LINK](https://youtu.be/LINK) 
+> **Vídeo Pitch da Solução:** [https://youtu.be/n4sDs9U3XLw?si=6jM3XxZ2Us7p5oyP](https://youtu.be/n4sDs9U3XLw?si=6jM3XxZ2Us7p5oyP) 
 ---
 
 ## 👥 Integrantes do Grupo
