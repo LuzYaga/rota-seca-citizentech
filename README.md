@@ -4,6 +4,7 @@
 > **Curso:** Engenharia de Software — Turma 2ESOA  
 > **Tema:** CitizenTech: Tecnologia com o cidadão no centro da inovação  
 > **Categoria:** Clima e emergências / Cidades  
+> **Repositório no GitHub:** [https://github.com/LuzYaga/rota-seca-citizentech](https://github.com/LuzYaga/rota-seca-citizentech)  
 > **Aplicação Web no Ar (GitHub Pages):** [https://luzyaga.github.io/rota-seca-citizentech/](https://luzyaga.github.io/rota-seca-citizentech/)  
 > **Vídeo Pitch da Solução:** [https://youtu.be/n4sDs9U3XLw?si=6jM3XxZ2Us7p5oyP](https://youtu.be/n4sDs9U3XLw?si=6jM3XxZ2Us7p5oyP) 
 ---
